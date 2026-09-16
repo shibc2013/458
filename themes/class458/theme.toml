@@ -1,0 +1,9 @@
+name = "class458"
+license = "MIT"
+min_version = "0.110.0"
+
+[author]
+  name = "458"
+
+[params]
+  description = "458班简洁中文主题"

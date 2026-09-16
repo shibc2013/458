@@ -1,0 +1,81 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+  background: #f4f7fb;
+  color: #333;
+  line-height: 1.7;
+}
+
+.container { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+.site-header {
+  background: #2f6fed;
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
+.header-inner { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 16px 20px; }
+.site-title { color: #fff; text-decoration: none; font-size: 22px; font-weight: 700; }
+.site-nav a { color: #e8efff; text-decoration: none; margin-left: 18px; font-size: 15px; }
+.site-nav a:hover { color: #fff; text-decoration: underline; }
+
+main.container { padding: 28px 20px; min-height: 60vh; }
+
+.hero {
+  background: linear-gradient(135deg, #2f6fed, #5aa2ff);
+  color: #fff;
+  border-radius: 12px;
+  padding: 42px 30px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.hero h1 { font-size: 40px; margin-bottom: 8px; }
+.hero-sub { font-size: 18px; opacity: .95; }
+.hero-info { margin-top: 10px; font-size: 15px; opacity: .9; }
+
+.card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 22px 26px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+.card h2 { font-size: 20px; margin-bottom: 12px; border-left: 4px solid #2f6fed; padding-left: 10px; }
+.card h2 a { color: #333; text-decoration: none; }
+.card h2 a:hover { color: #2f6fed; }
+
+.summary { color: #555; font-size: 15px; }
+.summary p { margin-bottom: 8px; }
+
+.post-list { list-style: none; }
+.post-list li { padding: 10px 0; border-bottom: 1px dashed #e5eaf2; }
+.post-list li:last-child { border-bottom: none; }
+.post-list a { color: #2f6fed; text-decoration: none; font-size: 16px; }
+.post-list a:hover { text-decoration: underline; }
+.date { color: #999; font-size: 13px; margin-left: 12px; }
+
+.page-title { font-size: 26px; margin-bottom: 14px; }
+.meta { color: #999; font-size: 14px; margin-bottom: 16px; }
+
+.content { font-size: 16px; color: #444; }
+.content p { margin-bottom: 12px; }
+.content h2, .content h3 { margin: 20px 0 10px; }
+.content ul, .content ol { padding-left: 22px; margin-bottom: 12px; }
+.content blockquote { border-left: 4px solid #ddd; padding-left: 12px; color: #666; margin-bottom: 12px; }
+
+.site-footer {
+  background: #fff;
+  border-top: 1px solid #e5eaf2;
+  padding: 20px;
+  text-align: center;
+  color: #888;
+  font-size: 14px;
+}
+.footer-sub { font-size: 12px; color: #aaa; margin-top: 4px; }
+
+@media (max-width: 600px) {
+  .header-inner { flex-direction: column; gap: 10px; }
+  .site-nav a { margin: 0 8px; }
+  .hero { padding: 28px 18px; }
+  .hero h1 { font-size: 30px; }
+}

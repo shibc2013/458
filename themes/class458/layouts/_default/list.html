@@ -1,0 +1,14 @@
+{{ define "title" }}{{ .Title }} · {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<h1 class="page-title">{{ .Title }}</h1>
+<ul class="post-list">
+  {{ range .Pages }}
+  <li>
+    <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    <span class="date">{{ .Date.Format "2006-01-02" }}</span>
+  </li>
+  {{ else }}
+  <li>暂无内容，敬请期待。</li>
+  {{ end }}
+</ul>
+{{ end }}

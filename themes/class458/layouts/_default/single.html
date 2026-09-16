@@ -1,0 +1,10 @@
+{{ define "title" }}{{ .Title }} · {{ .Site.Title }}{{ end }}
+{{ define "main" }}
+<article class="card">
+  <h1 class="page-title">{{ .Title }}</h1>
+  {{ if .Section }}<p class="meta">{{ .Date.Format "2006年01月02日" }}</p>{{ end }}
+  <div class="content">
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}

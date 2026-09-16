@@ -1,0 +1,27 @@
+{{ define "title" }}{{ .Site.Title }} · 班级网站{{ end }}
+{{ define "main" }}
+<section class="hero">
+  <h1>{{ .Site.Title }}</h1>
+  <p class="hero-sub">阳泉市第三中学校 · 2025级</p>
+  <p class="hero-info">班主任：李老师</p>
+</section>
+
+{{ with .Site.GetPage "/notice" }}
+<section class="card">
+  <h2><a href="{{ .RelPermalink }}">公告栏</a></h2>
+  <div class="summary">{{ .Summary }}</div>
+</section>
+{{ end }}
+
+<section class="card">
+  <h2><a href="{{ "/posts/" | relURL }}">最新动态</a></h2>
+  <ul class="post-list">
+    {{ range first 5 (where .Site.RegularPages "Section" "posts") }}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      <span class="date">{{ .Date.Format "2006-01-02" }}</span>
+    </li>
+    {{ end }}
+  </ul>
+</section>
+{{ end }}
