@@ -1,0 +1,33 @@
+# -- Main Menu --
+
+[[main]]
+  name = "首页"
+  pageRef = "/"
+  weight = 10
+
+[[main]]
+  name = "班级介绍"
+  pageRef = "about"
+  weight = 20
+
+[[main]]
+  name = "公告栏"
+  pageRef = "notice"
+  weight = 30
+
+[[main]]
+  name = "班级动态"
+  pageRef = "posts"
+  weight = 40
+
+# -- Footer Menu --
+
+[[footer]]
+  name = "班级介绍"
+  pageRef = "about"
+  weight = 10
+
+[[footer]]
+  name = "公告栏"
+  pageRef = "notice"
+  weight = 20

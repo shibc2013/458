@@ -1,7 +1,4 @@
 baseURL = 'https://458.shibc.cloud/'
-locale = 'zh-cn'
-title = '458班'
-theme = 'class458'
+theme = 'blowfish2'
 defaultContentLanguage = 'zh-cn'
-[params]
-  description = '阳泉市第三中学校 2025级 458班 班级网站'
+enableRobotsTXT = true

@@ -1,0 +1,17 @@
+disabled = false
+locale = "zh-CN"
+label = "简体中文"
+weight = 1
+title = "458班"
+
+[params]
+  displayName = "中"
+  isoCode = "zh-cn"
+  rtl = false
+  dateFormat = "2006年1月2日"
+  description = "阳泉市第三中学校 2025级 458班 班级网站"
+
+[params.author]
+  name = "458班"
+  headline = "阳泉市第三中学校 · 2025级"
+  bio = "阳泉市第三中学校 2025级 458班的网上小家园，记录班级动态与青春时光。"
