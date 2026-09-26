@@ -11,9 +11,19 @@
   weight = 20
 
 [[main]]
-  name = "公告栏"
-  pageRef = "notice"
+  name = "成员名单"
+  pageRef = "members"
+  weight = 25
+
+[[main]]
+  name = "作业公示"
+  pageRef = "homework"
   weight = 30
+
+[[main]]
+  name = "大事公示"
+  pageRef = "events"
+  weight = 35
 
 [[main]]
   name = "班级动态"
@@ -28,6 +38,16 @@
   weight = 10
 
 [[footer]]
-  name = "公告栏"
-  pageRef = "notice"
+  name = "成员名单"
+  pageRef = "members"
+  weight = 15
+
+[[footer]]
+  name = "作业公示"
+  pageRef = "homework"
   weight = 20
+
+[[footer]]
+  name = "大事公示"
+  pageRef = "events"
+  weight = 25
