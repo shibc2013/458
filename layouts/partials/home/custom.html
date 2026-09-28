@@ -1,6 +1,60 @@
 {{ $disableImageOptimization := .Site.Params.disableImageOptimization | default false }}
+<style>
+  /* ---- 入场动画 ---- */
+  @keyframes rvFadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .rv-item {
+    opacity: 0;
+    animation: rvFadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+  .rv-d1 { animation-delay: 0.10s; }
+  .rv-d2 { animation-delay: 0.20s; }
+  .rv-d3 { animation-delay: 0.30s; }
+  .rv-d4 { animation-delay: 0.40s; }
+  .rv-d5 { animation-delay: 0.50s; }
+  .rv-d6 { animation-delay: 0.60s; }
+  .rv-d7 { animation-delay: 0.70s; }
+  .rv-d8 { animation-delay: 0.80s; }
+
+  /* ---- 滚动渐入渐出 ---- */
+  .rv-scroll {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .rv-scroll.rv-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---- 鼠标光效 ---- */
+  #rv-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 420px;
+    height: 420px;
+    margin: -210px 0 0 -210px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.14) 0%, rgba(139, 92, 246, 0.08) 40%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  html.rv-glow-on #rv-glow { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rv-item, .rv-scroll { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important; }
+  }
+</style>
+<div id="rv-glow" aria-hidden="true"></div>
+
 <article class="flex flex-col items-center justify-center text-center">
-  <header class="relative px-1 py-1 flex flex-col items-center mb-3">
+  <header class="rv-item rv-d1 relative px-1 py-1 flex flex-col items-center mb-3">
     <h1 class="text-4xl font-extrabold">
       {{ .Site.Params.Author.name | default .Site.Title }}
     </h1>
@@ -10,7 +64,7 @@
       </h2>
     {{ end }}
   </header>
-  <section class="prose dark:prose-invert w-full">
+  <section class="rv-item rv-d2 prose dark:prose-invert w-full">
     <figure class="mt-2">
       <img
         class="rounded-lg shadow-lg w-full"
@@ -22,14 +76,14 @@
     </figure>
     <div class="mt-6">{{ .Content }}</div>
   </section>
-  <div class="mt-8 grid w-full max-w-3xl grid-cols-2 gap-3 sm:gap-4">
+  <div class="rv-item rv-d3 mt-8 grid w-full max-w-3xl grid-cols-2 gap-3 sm:gap-4">
     <a href="/about/" class="rounded-xl border border-neutral-300 bg-white/80 px-4 py-5 text-center font-semibold text-neutral-800 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-500 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-100">班级介绍</a>
     <a href="/members/" class="rounded-xl border border-neutral-300 bg-white/80 px-4 py-5 text-center font-semibold text-neutral-800 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-500 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-100">成员名单</a>
     <a href="/homework/" class="rounded-xl border border-neutral-300 bg-white/80 px-4 py-5 text-center font-semibold text-neutral-800 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-500 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-100">作业公示</a>
     <a href="/events/" class="rounded-xl border border-neutral-300 bg-white/80 px-4 py-5 text-center font-semibold text-neutral-800 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-500 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-100">大事公示</a>
   </div>
 </article>
-<section>
+<section class="rv-scroll">
   {{ partial "recent-articles/main.html" . }}
 </section>
 <canvas id="home-particles" aria-hidden="true"></canvas>
@@ -77,5 +131,50 @@
       requestAnimationFrame(dr);
     }
     dr();
+
+    // ---- 滚动渐入渐出 ----
+    var scrollEls = document.querySelectorAll(".rv-scroll");
+    if ("IntersectionObserver" in window && scrollEls.length) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            en.target.classList.add("rv-in");
+          } else {
+            en.target.classList.remove("rv-in");
+          }
+        });
+      }, { threshold: 0.12 });
+      scrollEls.forEach(function (el) { io.observe(el); });
+    } else {
+      scrollEls.forEach(function (el) { el.classList.add("rv-in"); });
+    }
+
+    // ---- 鼠标光效 ----
+    var glow = document.getElementById("rv-glow");
+    if (glow && window.matchMedia("(pointer: fine)").matches) {
+      var tx = window.innerWidth / 2, ty = window.innerHeight / 3;
+      var gx = tx, gy = ty;
+      var shown = false;
+      var ticking = false;
+      document.addEventListener("mousemove", function (e) {
+        tx = e.clientX; ty = e.clientY;
+        if (!shown) { shown = true; document.documentElement.classList.add("rv-glow-on"); }
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(function () {
+            gx += (tx - gx) * 0.10;
+            gy += (ty - gy) * 0.10;
+            glow.style.transform = "translate(" + gx + "px," + gy + "px)";
+            ticking = false;
+          });
+        }
+      }, { passive: true });
+      (function loop() {
+        gx += (tx - gx) * 0.10;
+        gy += (ty - gy) * 0.10;
+        glow.style.transform = "translate(" + gx + "px," + gy + "px)";
+        requestAnimationFrame(loop);
+      })();
+    }
   })();
 </script>
