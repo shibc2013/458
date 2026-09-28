@@ -5,6 +5,7 @@ weight = 1
 title = "458班"
 
 [params]
+  copyright = "2026 阳三458班 | By shibc"
   displayName = "中"
   isoCode = "zh-cn"
   rtl = false

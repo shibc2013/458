@@ -22,7 +22,60 @@
     </figure>
     <div class="mt-6">{{ .Content }}</div>
   </section>
+  <div class="mt-8 grid w-full max-w-3xl grid-cols-2 gap-3 sm:gap-4">
+    <a href="/about/" class="rounded-xl border border-neutral-300 bg-white/80 px-4 py-5 text-center font-semibold text-neutral-800 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-500 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-100">班级介绍</a>
+    <a href="/members/" class="rounded-xl border border-neutral-300 bg-white/80 px-4 py-5 text-center font-semibold text-neutral-800 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-500 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-100">成员名单</a>
+    <a href="/homework/" class="rounded-xl border border-neutral-300 bg-white/80 px-4 py-5 text-center font-semibold text-neutral-800 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-500 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-100">作业公示</a>
+    <a href="/events/" class="rounded-xl border border-neutral-300 bg-white/80 px-4 py-5 text-center font-semibold text-neutral-800 shadow-sm transition hover:-translate-y-0.5 hover:border-primary-500 hover:shadow-md dark:border-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-100">大事公示</a>
+  </div>
 </article>
 <section>
   {{ partial "recent-articles/main.html" . }}
 </section>
+<canvas id="home-particles" aria-hidden="true"></canvas>
+<style>
+  #home-particles {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    display: block;
+  }
+</style>
+<script>
+  (function () {
+    var c = document.getElementById("home-particles");
+    if (!c) return;
+    var x = c.getContext("2d");
+    var W, H, ps = [];
+    function rs() { W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
+    rs();
+    window.addEventListener("resize", rs);
+    var N = Math.max(24, Math.min(60, Math.floor(window.innerWidth / 28)));
+    for (var i = 0; i < N; i++) {
+      ps.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.6 + 0.4,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        a: Math.random() * 0.35 + 0.08
+      });
+    }
+    function dr() {
+      x.clearRect(0, 0, W, H);
+      for (var i = 0; i < ps.length; i++) {
+        var p = ps[i];
+        p.x += p.vx; p.y += p.vy;
+        if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+        if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+        x.beginPath();
+        x.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        x.fillStyle = "rgba(110,110,120," + p.a + ")";
+        x.fill();
+      }
+      requestAnimationFrame(dr);
+    }
+    dr();
+  })();
+</script>
