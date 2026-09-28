@@ -1,0 +1,168 @@
+<style>
+  /* ================= 全站动效（Global Effects） ================= */
+  /* ---- 入场动画 ---- */
+  @keyframes rvFadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .rv-item {
+    opacity: 0;
+    animation: rvFadeUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+  .rv-d1 { animation-delay: 0.10s; }
+  .rv-d2 { animation-delay: 0.20s; }
+  .rv-d3 { animation-delay: 0.30s; }
+  .rv-d4 { animation-delay: 0.40s; }
+  .rv-d5 { animation-delay: 0.50s; }
+  .rv-d6 { animation-delay: 0.60s; }
+  .rv-d7 { animation-delay: 0.70s; }
+  .rv-d8 { animation-delay: 0.80s; }
+
+  /* ---- 滚动渐入渐出 ---- */
+  .rv-scroll {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1), transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+    will-change: opacity, transform;
+  }
+  .rv-scroll.rv-in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ---- 鼠标光效 ---- */
+  #rv-glow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 420px;
+    height: 420px;
+    margin: -210px 0 0 -210px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: -1;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.14) 0%, rgba(139, 92, 246, 0.08) 40%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  html.rv-glow-on #rv-glow { opacity: 1; }
+
+  /* ---- 粒子背景 ---- */
+  #site-particles {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rv-item, .rv-scroll { opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important; }
+  }
+</style>
+<div id="rv-glow" aria-hidden="true"></div>
+<canvas id="site-particles" aria-hidden="true"></canvas>
+<script>
+  (function () {
+    var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ---- 粒子背景（全站） ---- */
+    var c = document.getElementById("site-particles");
+    if (c && !reduceMotion) {
+      var x = c.getContext("2d");
+      var W, H, ps = [];
+      function rs() { W = c.width = window.innerWidth; H = c.height = window.innerHeight; }
+      rs();
+      window.addEventListener("resize", rs);
+      var N = Math.max(24, Math.min(60, Math.floor(window.innerWidth / 28)));
+      for (var i = 0; i < N; i++) {
+        ps.push({
+          x: Math.random() * W,
+          y: Math.random() * H,
+          r: Math.random() * 1.6 + 0.4,
+          vx: (Math.random() - 0.5) * 0.25,
+          vy: (Math.random() - 0.5) * 0.25,
+          a: Math.random() * 0.35 + 0.08
+        });
+      }
+      function dr() {
+        x.clearRect(0, 0, W, H);
+        for (var i = 0; i < ps.length; i++) {
+          var p = ps[i];
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0) p.x = W; if (p.x > W) p.x = 0;
+          if (p.y < 0) p.y = H; if (p.y > H) p.y = 0;
+          x.beginPath();
+          x.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          x.fillStyle = "rgba(110,110,120," + p.a + ")";
+          x.fill();
+        }
+        requestAnimationFrame(dr);
+      }
+      dr();
+    }
+
+    /* ---- 滚动渐入渐出（全站自动应用） ---- */
+    var scrollEls = [];
+    function pushEl(el) { if (scrollEls.indexOf(el) < 0) scrollEls.push(el); }
+    var main = document.getElementById("main-content");
+    if (main) {
+      var kids = Array.prototype.slice.call(main.children);
+      kids.forEach(function (el) {
+        var tag = (el.tagName || "").toLowerCase();
+        if (el.classList.contains("no-rv-scroll")) return;
+        if (["script", "style", "noscript", "template"].indexOf(tag) >= 0) return;
+        if (!el.classList.contains("rv-scroll")) el.classList.add("rv-scroll");
+        pushEl(el);
+      });
+      var manual = main.querySelectorAll(".rv-scroll");
+      Array.prototype.forEach.call(manual, pushEl);
+    }
+    if (reduceMotion) {
+      scrollEls.forEach(function (el) { el.classList.add("rv-in"); });
+    } else if ("IntersectionObserver" in window && scrollEls.length) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) {
+            en.target.classList.add("rv-in");
+          } else {
+            en.target.classList.remove("rv-in");
+          }
+        });
+      }, { threshold: 0.12 });
+      scrollEls.forEach(function (el) {
+        if (!el._rvObserved) { io.observe(el); el._rvObserved = true; }
+      });
+    } else {
+      scrollEls.forEach(function (el) { el.classList.add("rv-in"); });
+    }
+
+    /* ---- 鼠标光效（全站） ---- */
+    var glow = document.getElementById("rv-glow");
+    if (glow && window.matchMedia("(pointer: fine)").matches && !reduceMotion) {
+      var tx = window.innerWidth / 2, ty = window.innerHeight / 3;
+      var gx = tx, gy = ty;
+      var shown = false;
+      var ticking = false;
+      document.addEventListener("mousemove", function (e) {
+        tx = e.clientX; ty = e.clientY;
+        if (!shown) { shown = true; document.documentElement.classList.add("rv-glow-on"); }
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(function () {
+            gx += (tx - gx) * 0.10;
+            gy += (ty - gy) * 0.10;
+            glow.style.transform = "translate(" + gx + "px," + gy + "px)";
+            ticking = false;
+          });
+        }
+      }, { passive: true });
+      (function loop() {
+        gx += (tx - gx) * 0.10;
+        gy += (ty - gy) * 0.10;
+        glow.style.transform = "translate(" + gx + "px," + gy + "px)";
+        requestAnimationFrame(loop);
+      })();
+    }
+  })();
+</script>
