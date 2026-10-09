@@ -43,11 +43,6 @@
   weight = 10
 
 [[footer]]
-  name = "成员名单"
-  pageRef = "members"
-  weight = 15
-
-[[footer]]
   name = "作业公示"
   pageRef = "homework"
   weight = 20

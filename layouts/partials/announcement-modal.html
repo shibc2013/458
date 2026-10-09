@@ -18,10 +18,17 @@
 </div>
 <script>
   (function () {
+    var KEY = "banbao_modal_closed";
+    try {
+      if (localStorage.getItem(KEY) === "1") return;
+    } catch (e) {}
     var modal = document.getElementById("announcement-modal");
     if (!modal) return;
     function show() { modal.style.display = "flex"; }
-    function hide() { modal.style.display = "none"; }
+    function hide() {
+      modal.style.display = "none";
+      try { localStorage.setItem(KEY, "1"); } catch (e) {}
+    }
     var closeBtn = document.getElementById("announcement-close");
     if (closeBtn) closeBtn.addEventListener("click", hide);
     modal.addEventListener("click", function (e) { if (e.target === modal) hide(); });
