@@ -5,6 +5,9 @@ enableRobotsTXT = true
 
 enableEmoji = true
 
+# 允许渲染日期在当前构建时间之后的档位（隔日档位提前生成时需要）
+buildFuture = true
+
 [pagination]
   pagerSize = 100
 
